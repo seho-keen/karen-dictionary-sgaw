@@ -1,0 +1,12 @@
+
+> karen-dictionary@0.1.0 dev /Users/sehopark/.gemini/antigravity/scratch/karen-dictionary
+> next dev --webpack
+
+▲ Next.js 16.1.6 (webpack)
+- Local:         http://localhost:3000
+- Network:       http://172.30.1.26:3000
+
+✓ Starting...
+✓ (serwist) Bundling the service worker script with the URL '/sw.js' and the scope '/'...
+✓ Ready in 865ms
+  Reload env: .env.local
