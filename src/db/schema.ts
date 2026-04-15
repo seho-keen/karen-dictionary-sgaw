@@ -8,6 +8,7 @@ export const words = sqliteTable('words', {
     koreanWord: text('korean_word').notNull(),
     romanization: text('romanization'),
     partOfSpeech: text('part_of_speech'),
+    level: integer('level').default(1),
     targetAudience: text('target_audience').default('all'),
     createdAt: integer('created_at').default(sql`(strftime('%s', 'now'))`),
 });

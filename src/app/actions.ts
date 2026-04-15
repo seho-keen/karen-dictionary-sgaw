@@ -6,14 +6,19 @@ import { words, examples, relates, media } from "@/db/schema";
 import { eq, or, like } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getKoreanPronunciation } from "@/utils/pronunciation";
 
 // ─── Add Word ───────────────────────────────────────────
 export async function addWord(formData: FormData) {
   const karenWord = formData.get("karenWord") as string;
   const koreanWord = formData.get("koreanWord") as string;
-  const romanization = (formData.get("romanization") as string) || null;
+  let romanization = (formData.get("romanization") as string) || null;
   const partOfSpeech = (formData.get("partOfSpeech") as string) || null;
   const targetAudience = (formData.get("targetAudience") as string) || "all";
+
+  if (!romanization && karenWord) {
+    romanization = getKoreanPronunciation(karenWord) || null;
+  }
 
   if (!karenWord || !koreanWord) {
     throw new Error("Karen word and Korean translation are required.");
@@ -165,4 +170,24 @@ export async function deleteWord(id: string) {
   await db.delete(words).where(eq(words.id, id));
   revalidatePath("/");
   redirect("/");
+}
+
+// ─── Add Example to existing word ───────────────────────
+export async function addExampleToWord(wordId: string, formData: FormData) {
+  const karenSentence = formData.get("karen") as string;
+  const koreanTranslation = formData.get("korean") as string;
+
+  if (!karenSentence || !koreanTranslation) {
+    throw new Error("Karen sentence and Korean translation are required.");
+  }
+
+  await db.insert(examples).values({
+    id: crypto.randomUUID(),
+    wordId,
+    karenSentence: karenSentence.trim(),
+    koreanTranslation: koreanTranslation.trim(),
+  });
+
+  revalidatePath(`/word/${wordId}`);
+  revalidatePath("/");
 }

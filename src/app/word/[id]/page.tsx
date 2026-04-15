@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { notFound } from "next/navigation";
 import { DeleteWordButton } from "@/components/DeleteWordButton";
 import Image from "next/image";
+import { AddExampleDialog } from "@/components/AddExampleDialog";
+import { isLegacyKaren } from "@/utils/isLegacyKaren";
 
 export default async function WordDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -39,7 +41,7 @@ export default async function WordDetailPage({ params }: { params: Promise<{ id:
                     <CardHeader className="pb-4">
                         <div className="flex justify-between items-start">
                             <div>
-                                <CardTitle className="text-4xl md:text-5xl mb-2 font-black text-primary">
+                                <CardTitle className={`text-4xl md:text-5xl mb-2 font-black text-primary ${isLegacyKaren(word.karenWord) ? 'font-karen-legacy' : ''}`}>
                                     {word.karenWord}
                                 </CardTitle>
                                 <CardDescription className="text-xl text-foreground font-medium">
@@ -102,9 +104,9 @@ export default async function WordDetailPage({ params }: { params: Promise<{ id:
                                 <ul className="space-y-2">
                                     {synonyms.map((syn) => (
                                         <li key={syn.id}>
-                                            <Link href={`/word/${syn.relatedWordId}`} className="text-primary hover:underline">
-                                                {syn.relatedKarenWord} ({syn.relatedKoreanWord})
-                                            </Link>
+                                            <Link href={`/word/${syn.relatedWordId}`} className={`text-primary hover:underline ${isLegacyKaren(syn.relatedKarenWord) ? 'font-karen-legacy' : ''}`}>
+                                                {syn.relatedKarenWord} 
+                                            </Link> ({syn.relatedKoreanWord})
                                         </li>
                                     ))}
                                 </ul>
@@ -118,9 +120,9 @@ export default async function WordDetailPage({ params }: { params: Promise<{ id:
                                 <ul className="space-y-2">
                                     {antonyms.map((ant) => (
                                         <li key={ant.id}>
-                                            <Link href={`/word/${ant.relatedWordId}`} className="text-primary hover:underline">
-                                                {ant.relatedKarenWord} ({ant.relatedKoreanWord})
-                                            </Link>
+                                            <Link href={`/word/${ant.relatedWordId}`} className={`text-primary hover:underline ${isLegacyKaren(ant.relatedKarenWord) ? 'font-karen-legacy' : ''}`}>
+                                                {ant.relatedKarenWord} 
+                                            </Link> ({ant.relatedKoreanWord})
                                         </li>
                                     ))}
                                 </ul>
@@ -136,16 +138,14 @@ export default async function WordDetailPage({ params }: { params: Promise<{ id:
                     <CardHeader>
                         <div className="flex items-center justify-between">
                             <CardTitle>Example Sentences</CardTitle>
-                            <Button variant="ghost" size="sm">
-                                <PlusCircle className="h-4 w-4 mr-2" /> Add Example
-                            </Button>
+                            <AddExampleDialog wordId={word.id} />
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {word.examples.length > 0 ? (
                             word.examples.map((ex) => (
                                 <div key={ex.id} className="p-4 rounded-lg bg-muted/40 border">
-                                    <p className="text-lg font-medium mb-1">{ex.karenSentence}</p>
+                                    <p className={`text-lg font-medium mb-1 ${isLegacyKaren(ex.karenSentence) ? 'font-karen-legacy' : ''}`}>{ex.karenSentence}</p>
                                     <p className="text-muted-foreground">{ex.koreanTranslation}</p>
                                 </div>
                             ))

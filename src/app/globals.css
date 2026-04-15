@@ -47,6 +47,17 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
+@font-face {
+  font-family: 'KarenLegacy';
+  src: url('/fonts/karen_legacy.ttf') format('truetype');
+  font-display: swap;
+}
+
+@utility font-karen-legacy {
+  font-family: 'KarenLegacy', sans-serif;
+  font-weight: normal !important;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Search, BookOpen, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { searchWords } from "@/app/actions";
+import { isLegacyKaren } from "@/utils/isLegacyKaren";
 
 type Word = {
     id: string;
@@ -75,7 +76,7 @@ export function WordList({ initialWords }: { initialWords: Word[] }) {
                     {words.map((word) => (
                         <Link key={word.id} href={`/word/${word.id}`}>
                             <div className="group rounded-xl border bg-card p-4 shadow-sm transition-all hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5 cursor-pointer">
-                                <p className="text-xl font-bold text-primary group-hover:text-primary/80 transition-colors">
+                                <p className={`text-xl font-bold text-primary group-hover:text-primary/80 transition-colors ${isLegacyKaren(word.karenWord) ? 'font-karen-legacy' : ''}`}>
                                     {word.karenWord}
                                 </p>
                                 <p className="text-base text-foreground mt-1">{word.koreanWord}</p>
